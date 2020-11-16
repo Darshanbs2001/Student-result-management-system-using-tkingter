@@ -1,5 +1,6 @@
 #to begin the development first we include or import the tkinter files
 import tkinter as Tk
+from tkinter import ttk 
 #root word or the place to store instance of the class tkinter 
 
 win=Tk.Tk()
@@ -11,6 +12,7 @@ win.title("Python GUI")
 #this is the statement that says wheter the app is able to resizeable or not and it 
 #has two parameters one for the vertical(x)and one for the horizontal(y).
 
-win.resizable(0,0)
+#win.resizable(0,0)
+ttk.Label(win,text="A Label").grid(column=0,row=0)
 #this is the statement that says i am still open and the app will be running until this line beyond it the app is destroyed
 win.mainloop()
