@@ -1,10 +1,13 @@
 import mysql.connector
 
+user_in=input("please enter the user id:")
+pass_in=input("please enter the password:")
+database=input("please enter the name of the database:")
 mydb = mysql.connector.connect(
   host="127.0.0.1",
-  user="root",
-  password="Da@9141525275",
-  database = "mydatabase"
+  user=user_in,
+  password=pass_in,
+  database = database
 )
 mycursor=mydb.cursor()
 #sql=("insert into customs (name,address) values(%s,%s)")
