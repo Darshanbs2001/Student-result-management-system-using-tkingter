@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk;
 from PIL import Image,ImageTk,ImageDraw
 from datetime import *
 from math import *
@@ -7,6 +8,7 @@ import time
 import os;
 from create_db import *
 from dashboard import *
+from forgot import Forgot
 class Login:
     def __init__(self,root1):
         self.root=root1
@@ -22,6 +24,9 @@ class Login:
         #==============variables===========
         self.emailid=StringVar()
         self.var_password=StringVar()
+        self.var_answer=StringVar()
+        self.window=False
+        self.var_newpassword=StringVar()
         right_lbl = Label(self.root, bg="#031F3C", bd=0)
         right_lbl.place(x=0, y=0, relheight=1, relwidth=1)
         #==================================login================
@@ -34,13 +39,33 @@ class Login:
         self.email_txt=Entry(self.loginframe,textvariable=self.var_password,font=("times new roman",15),bd=0,bg="lightgrey",fg="black").place(x=500,y=400,width=350,height=35)
         #======================buttons==============
         self.btn_reg=Button(self.loginframe,text="Register New Account",font=("times new roman",14),bg="white",bd=0,fg="#B00857",cursor="hand2",command=self.add_reg).place(x=500,y=440)
+        self.btn_forgot=Button(self.loginframe,text="Forgot password ?",font=("times new roman",14),bg="white",bd=0,fg="red",cursor="hand2",command=self.add_forgot).place(x=700,y=440)
         self.btn_login=Button(self.loginframe,text="Login",font=("times new roman",20,"bold"),command=self.add_dashboard,fg="white",bg="#B00857",cursor="hand2").place(x=500,y=480,width=150,height=40)
 
     def add_reg(self):
         self.root.destroy()
         os.system("python register.py")
 
+    def add_forgot(self):
+        if self.window==True:
+            self.new_window.destroy()
+            self.window=False
+        if self.emailid.get() == "":
+            messagebox.showerror("Error", "Please enter the email id ", parent=self.root)
+        else:
+            mycursor.execute("select * from login where email=%s", (self.emailid.get(),))
+            rows = mycursor.fetchall()
+            if rows == []:
+                messagebox.showerror("Error", "The email id doesnot exists in the database", parent=self.root)
+            else:
+                self.window=True
+                Forgot.var_emailid=self.emailid.get()
+                self.new_window=Toplevel(self.root)
+                self.new_obj=Forgot(self.new_window)
+
+
     def add_dashboard(self):
+
         if self.emailid.get()=="" or self.var_password.get()=="":
             messagebox.showerror("Error","Please fill all the field",parent=self.root)
         else:
