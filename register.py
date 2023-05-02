@@ -1,7 +1,6 @@
-import tkinter
 from create_db import *
 import os;
-from PIL import Image,ImageTk
+from PIL import ImageTk
 from tkinter import ttk,messagebox
 class Register:
     def __init__(self,root):

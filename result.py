@@ -1,6 +1,5 @@
-from tkinter import *
 from create_db import *
-from openpyxl import Workbook,load_workbook
+from openpyxl import load_workbook
 from tkinter import ttk,messagebox
 wb=load_workbook("hello1.xlsx")
 ws=wb.active

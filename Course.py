@@ -119,7 +119,7 @@ class Courseclass:
                     sql = "insert into course(name,duration,charges,s1,s2,s3) values(%s,%s,%s,%s,%s,%s)"
                     mycursor.execute(sql, val)
                     mydb.commit()
-                    messagebox.showerror("Success", "Course Added Successfully ", parent=self.root)
+                    messagebox.showinfo("Success", "Course Added Successfully ", parent=self.root)
                     self.show()
 
                 else:
@@ -182,7 +182,7 @@ class Courseclass:
                         self.var_cid.get()
                     ))
                     mydb.commit()
-                    messagebox.showerror("Success", "Course Updated successfully ", parent=self.root)
+                    messagebox.showinfo("Success", "Course Updated successfully ", parent=self.root)
                     self.show()
                 else:
                     messagebox.showerror("Error", "Select course from the list", parent=self.root)

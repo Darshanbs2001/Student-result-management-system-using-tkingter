@@ -1,8 +1,5 @@
-from tkinter import *
-
 from create_db import *
 
-from PIL import Image,ImageTk
 from tkinter import ttk ,messagebox
 class Studentclass:
 

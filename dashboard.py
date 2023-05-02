@@ -1,4 +1,5 @@
 from tkinter import *
+import sys
 from tkinter import messagebox
 from create_db import *
 from PIL import Image,ImageTk
@@ -6,17 +7,19 @@ from Course import Courseclass
 from Student import Studentclass
 from result import Result
 from view import View
+from async_tkinter_loop import async_mainloop,async_handler
 import os;
-
+email=""
 class RMS:
 
     def __init__(self, root):
         self.root = root
+     
         self.root.title("Student Result Mangament System")
         self.root.geometry("1350x700+0+0")
         self.root.config(bg="white")
         #---- icons ----
-        self.logo_dash=ImageTk.PhotoImage(file="images/logo_p.png")
+        self.logo_dash=ImageTk.PhotoImage(file="../../images/logo_p.png")
         title = Label(self.root, text="Student Result Management System",compound=LEFT,padx=10,  image=self.logo_dash ,font=("goudy old style", 20, "bold"), bg="#033054",
                      fg="white").place(x=0, y=0, relwidth=1, height=50)
         self.window1=False
@@ -26,6 +29,7 @@ class RMS:
         #self.var_courseno=StringVar()
         #self.var_studentno=StringVar()
         #self.var_resultno=StringVar()
+        self.email=StringVar()
         #====menu ====
         M_Frame=LabelFrame(self.root,text="Menus",font=("times new roman",15),bg="white")
         M_Frame.place(x=10,y=70,width=1340,height=80)
@@ -35,9 +39,9 @@ class RMS:
         btn_result=Button(M_Frame,text="Result",font=("goudy old style ",15,"bold"),bg="#0b5377",fg="white",cursor="hand2",command=self.add_Result).place(x=420,y=5,width=180,height=40)
         btn_view_student_result=Button(M_Frame,text="View Student Result",font=("goudy old style ",15,"bold"),bg="#0b5377",fg="white",cursor="hand2",command=self.add_view).place(x=620,y=5,width=200,height=40)
         btn_logout=Button(M_Frame,text="Logout",command=self.logout,font=("goudy old style ",15,"bold"),bg="#0b5377",fg="white",cursor="hand2").place(x=840,y=5,width=180,height=40)
-        btn_exit=Button(M_Frame,text="Exit",font=("goudy old style ",15,"bold"),bg="#0b5377",fg="white",cursor="hand2",command=self.exit).place(x=1040,y=5,width=180,height=40)
+        btn_exit=Button(M_Frame,text="Exit",font=("goudy old style ",15,"bold"),bg="#0b5377",fg="white",cursor="hand2",command=async_handler(self.exit)).place(x=1040,y=5,width=180,height=40)
         #====content_window===
-        self.bg_img=Image.open("images/bg.png")
+        self.bg_img=Image.open("../../images/bg.png")
         self.bg_img=self.bg_img.resize((920,350),Image.ANTIALIAS)
         self.bg_img=ImageTk.PhotoImage(self.bg_img)
 
@@ -97,9 +101,9 @@ class RMS:
         if self.window3 == True:
             self.new_win3.destroy()
             self.window3=False
-        if self.window3 == True:
-            self.new_win3.destroy()
-            self.window3 = False
+        if self.window4 == True:
+            self.new_win4.destroy()
+            self.window4 = False
         self.window2=True
         self.new_win2=Toplevel(self.root)
         self.new_obj2=Studentclass(self.new_win2)
@@ -137,24 +141,27 @@ class RMS:
         self.window3=True
         self.new_win3 = Toplevel(self.root)
         self.new_obj3 = Result(self.new_win3)
-    def logout(self):
-        mycursor.execute("update login set status=%s",("not logged in",))
-        mydb.commit()
-        self.root.destroy()
-        os.system("python login.py")
+    async def logout(self):
+        async def execute(self):
+            mycursor.execute("update login set status=%s where email=%s", ("not logged in", email))
+            mydb.commit()
+            self.root.destroy()
+            os.system("python login.py")
+        await execute()
 
     def exit(self):
-        mycursor.execute("update login set status=%s", ("not logged in",))
+        mycursor.execute("update login set status=%s where email=%s", ("not logged in",email))
         mydb.commit()
         self.root.destroy()
 
 if __name__ == "__main__":
-
-    mycursor.execute("select email,status from login where status=%s",("logged in",))
+    email=sys.argv[1]
+    mycursor.execute("select status from login where email=%s",(email,))
     rows=mycursor.fetchall()
+    print(rows)
     if rows==[]:
         messagebox.showerror("Error","please login first to use the app")
     else:
        root = Tk()
        obj = RMS(root)
-       root.mainloop()
+       async_mainloop(root)
